@@ -17,6 +17,7 @@ The following URLs are available:
 ```sh
 git clone https://github.com/itkoblov/mapproxy.git
 cd mapproxy
+sudo chmod a+rwx -R cache_data/
 docker build -t mapproxy-test . --build-arg HTTP_PROXY="http://10.33.46.5:8080"
 ```
 
@@ -24,5 +25,13 @@ docker build -t mapproxy-test . --build-arg HTTP_PROXY="http://10.33.46.5:8080"
 
 ```sh
 cd mapproxy
+docker compose up -d
+```
+
+# Stop taking data from tile servers and caching it in the cache_data/ folder
+```sh
+cd mapproxy
+docker compose down
+sudo chmod a-rwx -R cache_data/
 docker compose up -d
 ```

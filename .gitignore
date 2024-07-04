@@ -2,7 +2,5 @@
 *.pyc
 import.pbf
 *~
-tiles
+tiles/*
 cache_data/**/*.png
-*.bak
-old_*
