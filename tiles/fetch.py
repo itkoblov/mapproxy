@@ -1,41 +1,32 @@
-from mpmath import sec, pi, log, tan
+from math import tan, pi, log, cos
 import requests
 import os
 
 # Tileserver pattern
-tileserver_pattern = "http://a.tile.openstreetmap.org/%d/%d/%d.png"
+tileserver_pattern = "https://tile.openstreetmap.org/%d/%d/%d.png"
 
-# longitude
-left_x = 2.768555
-right_x = 7.558594
+# Longitude
+left_x = 7.413644
+right_x = 7.519490
 
-# latitudes
-left_y = 50.439432
-right_y = 54.158682
+# Latitudes
+left_y = 51.489529
+right_y = 51.538781
 
-# Zoomlevels
-zoom_min = 0
-zoom_max = 8
-
+# Zoom levels
+zoom_min = 6
+zoom_max = 7
 
 def make_dirs(z, x):
-    try:
-        os.stat("%d/" % z)
-    except:
-        os.mkdir("%d/" % z)
-    try:
-        os.stat("%d/%d/" % (z, x))
-    except:
-        os.mkdir("%d/%d/" % (z, x))
-
+    os.makedirs(f"tiles/{z}/{x}", exist_ok=True)
 
 for zoom in range(zoom_min, zoom_max + 1):
     num_tiles = 2 ** zoom
     if zoom > 5:
         x = int(num_tiles * (left_x + 180.0) / 360.0)
         X = int(num_tiles * (right_x + 180.0) / 360.0)
-        y = int(num_tiles * (1.0 - log(tan(left_y * pi / 180.0) + sec(left_y * pi / 180.0)) / pi) / 2.0)
-        Y = int(num_tiles * (1.0 - log(tan(right_y * pi / 180.0) + sec(right_y * pi / 180.0)) / pi) / 2.0)
+        y = int(num_tiles * (1.0 - log(tan(left_y * pi / 180.0) + 1 / cos(left_y * pi / 180.0)) / pi) / 2.0)
+        Y = int(num_tiles * (1.0 - log(tan(right_y * pi / 180.0) + 1 / cos(right_y * pi / 180.0)) / pi) / 2.0)
     else:
         x = 0
         y = 0
@@ -47,12 +38,22 @@ for zoom in range(zoom_min, zoom_max + 1):
 
     for q_x in range(x, X + 1):
         for q_y in range(y, Y + 1):
-            filename = "%d/%d/%d.png" % (zoom, q_x, q_y)
+            filename = f"tiles/{zoom}/{q_x}/{q_y}.png"
             if not os.path.isfile(filename):
                 url = tileserver_pattern % (zoom, q_x, q_y)
-                print url, "..."
+                print(url, "...")
                 make_dirs(zoom, q_x)
-                response = requests.get(url)
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+                    'Referer': 'https://www.openstreetmap.org/'
+                }
+                response = requests.get(url, headers=headers)
                 if response.status_code == 200:
                     with open(filename, 'wb') as f:
                         f.write(response.content)
+                    print("Saved:", filename)
+                else:
+                    print("Failed to fetch:", url, "Status code:", response.status_code)
+            else:
+                print("Already exists:", filename)
+

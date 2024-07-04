@@ -1,0 +1,11 @@
+#version: '3.8'
+
+services:
+  mapproxy:
+    image: mapproxy-test
+    ports:
+      - "80:80"
+    volumes:
+#      - ./tiles:/var/www/osm_tiles
+      - ./cache_data:/usr/local/mapproxy/cache_data
+    restart: unless-stopped

@@ -15,7 +15,10 @@ layers:
 
 caches:
   mycache:
-    disable_storage: true
+    #disable_storage: true
+    cache:
+      type: file
+      directory: /usr/local/mapproxy/cache_data
     grids: [tile_grid_of_source]
     sources: [my_tile_source]
 
@@ -23,7 +26,7 @@ sources:
   my_tile_source:
     type: tile
     grid: tile_grid_of_source
-    url: http://127.0.0.1/osm_tiles/%(z)s/%(x)s/%(y)s.png
+    url: https://tile.openstreetmap.org/%(z)s/%(x)s/%(y)s.png
 
 grids:
   tile_grid_of_source:
