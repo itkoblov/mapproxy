@@ -4,3 +4,6 @@ import.pbf
 *~
 tiles/*
 cache_data/**/*.png
+cache_data/**/*.lck
+*.bak*
+log/*

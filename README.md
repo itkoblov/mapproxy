@@ -12,23 +12,23 @@ The following URLs are available:
 * Mapproxy interface http://container-ip/mapproxy/
 * WMS service URL: http://container-ip/mapproxy/service
 
-# Create a container with my proxy
+# Create and run a container
 
 ```sh
 git clone https://github.com/itkoblov/mapproxy.git
 cd mapproxy
 sudo chmod a+rwx -R cache_data/
-docker build -t mapproxy-test . --build-arg HTTP_PROXY="http://10.33.46.5:8080"
+docker compose build && docker compose up -d
 ```
 
-# Starting the container
+# Run the container
 
 ```sh
 cd mapproxy
 docker compose up -d
 ```
 
-# Stop taking data from tile servers and caching it in the cache_data/ folder
+# To view maps from OpenStreetMap servers instead of cached maps from the cache_data/ folder, follow these steps
 ```sh
 cd mapproxy
 docker compose down

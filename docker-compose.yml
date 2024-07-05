@@ -1,11 +1,22 @@
-#version: '3.8'
-
 services:
   mapproxy:
+    build:
+      context: .
+      args:
+        HTTP_PROXY: ${HTTP_PROXY}
+        HTTPS_PROXY: ${HTTPS_PROXY}
+        NO_PROXY: ${NO_PROXY}
     image: mapproxy-test
     ports:
       - "80:80"
     volumes:
-#      - ./tiles:/var/www/osm_tiles
+#      - ./log.ini:/usr/local/mapproxy/log.ini
       - ./cache_data:/usr/local/mapproxy/cache_data
+      - ./log:/var/log/apache2
+      - ./mapproxy-mapnik.yaml:/usr/local/mapproxy/mapproxy-mapnik.yaml
+      - ./config.py:/usr/local/mapproxy/config.py
+      - ./tileserver.conf:/etc/apache2/sites-available/tileserver.conf
+      - ./supervisord.conf:/etc/supervisor/conf.d/supervisord.conf
     restart: unless-stopped
+    env_file:
+      - .env

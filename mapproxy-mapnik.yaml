@@ -9,13 +9,25 @@ services:
       online_resource: http://mapproxy.org/
 
 layers:
-  - name: my_layer
-    title: WMS layer from tiles
+  - name: base
+    title: Basiskarte
     sources: [mycache]
+  - name: pubtrans
+    title: ÖPNV-Haltestellen
+    sources: [mycache]
+  - name: poi
+    title: Points of Interest
+    sources: [mycache]
+  - name: boundaries
+    title: Gebietsgrenzen
+    sources: [mycache]
+  - name: ways
+    title: Wege
+    sources: [mycache]
+
 
 caches:
   mycache:
-    #disable_storage: true
     cache:
       type: file
       directory: /usr/local/mapproxy/cache_data
