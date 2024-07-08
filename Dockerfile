@@ -1,4 +1,4 @@
-FROM phusion/baseimage:focal-1.2.0
+FROM phusion/baseimage:jammy-1.0.4
 
 # Set the locale
 ENV LANG=C.UTF-8
